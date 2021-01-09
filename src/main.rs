@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use rayon::prelude::*;
 use serde_json::Value;
 use std::fs::File;
 use std::io;
@@ -37,7 +38,7 @@ fn main() {
         split.for_each(|token| result.push(token.to_owned()));
     });
 
-    let players:Vec<Player> = result.into_iter().map(Player::new).collect();
+    let players:Vec<Player> = result.into_par_iter().map(Player::new).collect();
 
     let output = serde_json::to_string_pretty(&players).unwrap();
 
